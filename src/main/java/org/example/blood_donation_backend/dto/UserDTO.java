@@ -1,5 +1,6 @@
 package org.example.blood_donation_backend.dto;
 
+import com.fasterxml.jackson.databind.BeanProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,5 @@ public class UserDTO {
         this.email = email;
         this.password = password;
     }
+
 }

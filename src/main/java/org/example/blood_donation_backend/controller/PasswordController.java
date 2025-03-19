@@ -12,21 +12,21 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @RestController
-@RequestMapping("/api/v1/password")
-@CrossOrigin
+@RequestMapping("/api/v1/pass")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PasswordController {
 
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping("/sentOTP")
+    @GetMapping("/OTP")
     public String sentOTP(@RequestParam String email){
         System.out.println("fdgh");
         try {
-            boolean exists = userService.ifEmailExists(email);
+            /*boolean exists = userService.ifEmailExists(email);
             if (!exists) {
                 return "Email does not exist";
-            }
+            }*/
             System.out.println("sentOTP");
             int code = (1000 + (int) (Math.random() * 9000));
             sendEmail(email, code);
