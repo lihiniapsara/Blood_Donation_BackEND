@@ -57,10 +57,15 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/api/v1/pass/OTP",
                                 "/api/v1/auth/authenticate",
-                                "/api/v1/*/register*",
+                                "/api/v1/*/register",
+                                "/api/v1/*/getAll",
+                                "/api/v1/*/update",
+                                "/api/v1/*/*",
+                                "/api/v1/*/update-date",
 
-                                /*"/api/v1/user/register",
-                                "/api/v1/donor/registerdonor",
+                                "/api/v1/user/update-role",
+
+                                /*"/api/v1/donor/registerdonor",
                                 "/api/v1/camp/registercamp",*/
                                 "/api/v1/auth/refreshToken",
                                 "/v3/api-docs/**",

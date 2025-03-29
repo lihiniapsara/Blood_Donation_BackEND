@@ -3,7 +3,10 @@ package org.example.blood_donation_backend.controller;
 import jakarta.validation.Valid;
 import org.example.blood_donation_backend.dto.HospitalDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
+import org.example.blood_donation_backend.dto.UserDTO;
+import org.example.blood_donation_backend.entity.User;
 import org.example.blood_donation_backend.service.HospitalService;
+import org.example.blood_donation_backend.service.UserService;
 import org.example.blood_donation_backend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,24 +23,25 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/hospital")
+@RequestMapping("api/v1/hospitals")
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 public class HospitalController {
 
     private final HospitalService hospitalService;
+    private final UserService userService;
 
-    public HospitalController(HospitalService hospitalService) {
+    public HospitalController(HospitalService hospitalService, UserService userService) {
         this.hospitalService = hospitalService;
+        this.userService = userService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        System.out.println("test");
-        return "test";
+    @GetMapping("/getAll")
+    public ResponseEntity<ResponseDTO> getAll() {
+        return new ResponseEntity<>(hospitalService.getAllHospitals(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<ResponseDTO> registerHospital(@RequestParam("hospitalName") String hospitalname,
+    public ResponseEntity<ResponseDTO> registerHospital(@RequestParam("hospitalName") String hospitalname, /* ... other params ... */
                                                         @RequestParam("typeOfHospital") String typeOfHospital,
                                                         @RequestParam("registrationNumber") String registrationNumber,
                                                         @RequestParam("yearOfEstablishment") Integer yearOfEstablishment,
@@ -58,17 +62,13 @@ public class HospitalController {
                                                         @RequestParam("healthMinistryApprovalCertificate") List<MultipartFile> imageFiles,
                                                         @RequestParam("emergencyBloodServiceAvailable") Boolean emergencyBloodServiceAvailable,
                                                         @RequestParam("bloodDonationCampFacility") Boolean bloodDonationCampFacility,
-                                                        @RequestParam("numberOfBloodStorageUnits") Integer numberOfBloodStorageUnits
-                                                        ) {
+                                                        @RequestParam("numberOfBloodStorageUnits") Integer numberOfBloodStorageUnits,
+                                                        @RequestParam("userName") String username) {
         System.out.println("Registering hospital...");
 
-
         try {
-            if (hospitalname == null || typeOfHospital == null || registrationNumber == null || yearOfEstablishment == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ResponseDTO(VarList.Bad_Request, "Missing Required Fields", null));
-            }
 
+            // Create a new HospitalDTO and set the hospital details
             HospitalDTO hospitalDTO = new HospitalDTO();
             hospitalDTO.setHospitalName(hospitalname);
             hospitalDTO.setTypeOfHospital(typeOfHospital);
@@ -92,6 +92,12 @@ public class HospitalController {
             hospitalDTO.setBloodDonationCampFacility(bloodDonationCampFacility);
             hospitalDTO.setNumberOfBloodStorageUnits(numberOfBloodStorageUnits);
 
+            // Set the user to the hospitalDTO
+            hospitalDTO.setUserName(username);
+
+            System.out.println(hospitalDTO);
+
+            // Handle image files (Health Ministry Approval Certificates)
             List<String> imagePaths = new ArrayList<>();
             if (imageFiles != null && !imageFiles.isEmpty()) {
                 for (MultipartFile file : imageFiles) {
@@ -111,10 +117,12 @@ public class HospitalController {
                     }
                 }
             }
-
             hospitalDTO.setHealthMinistryApprovalCertificate(imagePaths);
+
+            // Save the hospital
             int res = hospitalService.saveHospital(hospitalDTO);
 
+            // Return response based on result
             return switch (res) {
                 case VarList.Created -> ResponseEntity.status(HttpStatus.CREATED)
                         .body(new ResponseDTO(VarList.Created, "Hospital Registered Successfully", hospitalDTO));
@@ -128,6 +136,6 @@ public class HospitalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(VarList.Bad_Gateway, "An unexpected error occurred", null));
         }
-
     }
+
 }

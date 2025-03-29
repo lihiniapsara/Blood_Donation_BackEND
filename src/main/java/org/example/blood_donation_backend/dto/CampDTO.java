@@ -17,4 +17,5 @@ public class CampDTO {
     private String district;
     private String province;
     private String zipCode;
+    private String hospitalname;
 }

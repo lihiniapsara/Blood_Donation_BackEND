@@ -6,10 +6,13 @@ import org.example.blood_donation_backend.dto.AuthDTO;
 import org.example.blood_donation_backend.dto.DonorDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.dto.UserDTO;
+import org.example.blood_donation_backend.entity.Donor;
+import org.example.blood_donation_backend.repo.DonorRepository;
 import org.example.blood_donation_backend.service.DonorService;
 import org.example.blood_donation_backend.service.UserService;
 import org.example.blood_donation_backend.util.JwtUtil;
 import org.example.blood_donation_backend.util.VarList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,24 +23,74 @@ import java.util.UUID;
 @RequestMapping("api/v1/donor")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DonorController {
+    @Autowired
     private final DonorService donorService;
+
+    @Autowired
+    private DonorRepository donorRepository;
 
     //Constructor injection
     public DonorController(DonorService donorService) {
         this.donorService = donorService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        System.out.println("test");
-        return "test";
+    @GetMapping("/getAll")
+    public ResponseEntity<ResponseDTO> getAll() {
+        return new ResponseEntity<>(donorService.getAllDonors(), HttpStatus.OK);
+
     }
+
+    @PutMapping("/update")
+    public ResponseDTO updateDonor(@RequestBody @Valid DonorDTO donorDTO) {
+        Donor donor = (Donor) donorRepository.findByContact(donorDTO.getContact()).orElse(null);
+
+        if (donor != null) {
+            // Update donor fields
+            donor.setFullName(donorDTO.getFullName());
+            donor.setDateOfBirth(donorDTO.getDateOfBirth());
+            donor.setGender(donorDTO.getGender());
+            donor.setBloodGroup(donorDTO.getBloodGroup());
+            donor.setNicOrPassport(donorDTO.getNicOrPassport());
+            donor.setEmail(donorDTO.getEmail());
+            donor.setAddress(donorDTO.getAddress());
+            donor.setCity(donorDTO.getCity());
+            donor.setDistrict(donorDTO.getDistrict());
+            donor.setProvince(donorDTO.getProvince());
+            donor.setZipCode(donorDTO.getZipCode());
+
+            System.out.println(donor);
+
+            donorRepository.save(donor); // Save the updated donor to the repository
+
+            return new ResponseDTO(VarList.Created, "Donor Updated Successfully", donor);
+        } else {
+            return new ResponseDTO(VarList.Not_Found, "Donor Not Found", null);
+        }
+    }
+
+    @PutMapping("update-date")
+    public ResponseDTO updateDonorDate(@RequestBody @Valid DonorDTO donorDTO) {
+        Donor donor = (Donor) donorRepository.findByContact(donorDTO.getContact()).orElse(null);
+
+        if (donor != null) {
+            // Update donor fields
+            donor.setDonationDate(donorDTO.getDonationDate());
+
+            donorRepository.save(donor); // Save the updated donor to the repository
+
+            return new ResponseDTO(VarList.Created, "Donor Updated Successfully", donor);
+        } else {
+            return new ResponseDTO(VarList.Not_Found, "Donor Not Found", null);
+        }
+    }
+
 
     @PostMapping(value = "/register")
     public ResponseEntity<ResponseDTO> registerDonor(@RequestBody @Valid DonorDTO donorDTO) {
         System.out.println("register donor");
         try {
             int res = donorService.saveDonor(donorDTO);
+            System.out.println(donorDTO+"3");
             switch (res) {
                 case VarList.Created -> {
 

@@ -16,8 +16,9 @@ import java.util.UUID;
 public class Hospital {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "BINARY(16)")
     private UUID hospitalid;
-    @Column(unique = true)
+    @Column(unique = true,name = "hospital_name")
     private String hospitalName;
     private String typeOfHospital;
     private String registrationNumber;
@@ -25,6 +26,7 @@ public class Hospital {
     private String address;
     private String city;
     private String district;
+
     private String province;
     private String zipCode;
     private String officialEmail;
@@ -42,4 +44,35 @@ public class Hospital {
     private boolean emergencyBloodServiceAvailable;
     private boolean bloodDonationCampFacility;
     private int numberOfBloodStorageUnits;
+
+    @ManyToOne
+    private User user;
+    /*@OneToMany
+    private List<Camp> camps;*/
+
+    public Hospital(User byUsername, String hospitalName, String typeOfHospital, String registrationNumber, int yearOfEstablishment, String address, String city, String district, String province, String zipCode, String officialEmail, String contactNumber, String emergencyContactNumber, String website, boolean hasBloodBank, String bloodBankContactPersonName, String bloodBankContactNumber, List<String> availableBloodGroups, String bloodBankLicenseNumber, List<String> healthMinistryApprovalCertificate, boolean emergencyBloodServiceAvailable, boolean bloodDonationCampFacility, int numberOfBloodStorageUnits) {
+        this.user = byUsername;
+        this.hospitalName = hospitalName;
+        this.typeOfHospital = typeOfHospital;
+        this.registrationNumber = registrationNumber;
+        this.yearOfEstablishment = yearOfEstablishment;
+        this.address = address;
+        this.city = city;
+        this.district = district;
+        this.province = province;
+        this.zipCode = zipCode;
+        this.officialEmail = officialEmail;
+        this.contactNumber = contactNumber;
+        this.emergencyContactNumber = emergencyContactNumber;
+        this.website = website;
+        this.hasBloodBank = hasBloodBank;
+        this.bloodBankContactPersonName = bloodBankContactPersonName;
+        this.bloodBankContactNumber = bloodBankContactNumber;
+        this.availableBloodGroups = availableBloodGroups;
+        this.bloodBankLicenseNumber = bloodBankLicenseNumber;
+        this.healthMinistryApprovalCertificate = healthMinistryApprovalCertificate;
+        this.emergencyBloodServiceAvailable = emergencyBloodServiceAvailable;
+        this.bloodDonationCampFacility = bloodDonationCampFacility;
+        this.numberOfBloodStorageUnits = numberOfBloodStorageUnits;
+    }
 }

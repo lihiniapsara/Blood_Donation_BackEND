@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<ResponseDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<ResponseDTO> registerUser(@RequestBody UserDTO userDTO) {
         System.out.println("register");
 
         try {
@@ -69,15 +69,16 @@ public class UserController {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
         }
 
     }
     @PutMapping("/update-role")
-    public ResponseEntity<ResponseDTO> updateUserRole(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<ResponseDTO> updateUserRoleByEmail(@RequestBody @Valid UserDTO userDTO) {
         try {
-            int result = userService.updateUserRole(userDTO);
+            int result = userService.updateUserRoleByEmail(userDTO);
 
             if (result == VarList.Created) {
                 return ResponseEntity.ok(new ResponseDTO(VarList.Created, "User role updated successfully", userDTO));

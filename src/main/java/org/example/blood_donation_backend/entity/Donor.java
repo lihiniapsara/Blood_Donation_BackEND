@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 @Entity
 @Table(name = "donor")
@@ -16,7 +17,6 @@ public class Donor implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(unique = true)
     private String fullName;
     private String dateOfBirth;
     private String gender;
@@ -36,4 +36,22 @@ public class Donor implements Serializable {
     private boolean hasSocialIssues;
     private boolean hasTattoos;
     private boolean hasOtherIssues;
+    private Date donationDate;
+
+    public Donor(String fullName, String dateOfBirth, String gender, String bloodGroup,
+                 String nicOrPassport, String contact, String email, String address,
+                 String city, String district, String province, String zipCode) {
+        this.fullName = fullName;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.bloodGroup = bloodGroup;
+        this.nicOrPassport = nicOrPassport;
+        this.contact = contact;
+        this.email = email;
+        this.Address = address;
+        this.city = city;
+        this.district = district;
+        this.province = province;
+        this.zipCode = zipCode;
+    }
 }

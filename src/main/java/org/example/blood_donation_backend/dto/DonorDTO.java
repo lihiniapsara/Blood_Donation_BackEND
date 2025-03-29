@@ -2,6 +2,8 @@ package org.example.blood_donation_backend.dto;
 
 import lombok.*;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -15,7 +17,7 @@ public class DonorDTO {
     private String nicOrPassport;
     private String contact;
     private String email;
-    private String Address;
+    private String address;
     private String city;
     private String district;
     private String province;
@@ -27,6 +29,8 @@ public class DonorDTO {
     private boolean hasSocialIssues;
     private boolean hasTattoos;
     private boolean hasOtherIssues;
+    private Date donationDate;
+
 
     public DonorDTO(String nicOrPassport, String email) {
         this.nicOrPassport = nicOrPassport;

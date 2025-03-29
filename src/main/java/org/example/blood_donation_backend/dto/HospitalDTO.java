@@ -31,4 +31,5 @@ public class HospitalDTO {
     private boolean emergencyBloodServiceAvailable;
     private boolean bloodDonationCampFacility;
     private int numberOfBloodStorageUnits;
+    private String userName;
 }

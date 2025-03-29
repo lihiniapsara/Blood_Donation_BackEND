@@ -1,5 +1,6 @@
 package org.example.blood_donation_backend.service.impl;
 
+import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.dto.UserDTO;
 import org.example.blood_donation_backend.entity.User;
 import org.example.blood_donation_backend.repo.UserRepository;
@@ -7,7 +8,6 @@ import org.example.blood_donation_backend.service.UserService;
 import org.example.blood_donation_backend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,9 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 @Service
     @Transactional
@@ -36,6 +34,8 @@ import java.util.UUID;
             User user = userRepository.findByEmail(email);
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
         }
+
+
 
         public UserDTO loadUserDetailsByUsername(String username) throws UsernameNotFoundException {
             User user = userRepository.findByEmail(username);
@@ -59,38 +59,39 @@ import java.util.UUID;
         }
 
     @Override
-    public int updateUserRole(UserDTO userDTO) {
+    public int updateUserRoleByEmail(UserDTO userDTO) {
+        User user = userRepository.findByEmail(userDTO.getEmail());
 
-        try {
-            Optional<User> optionalUser = Optional.ofNullable(userRepository.findByRole(userDTO.getEmail()));
-
-            if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
-
-                // Role එක check කරන්න
-                if (userDTO.getRole() != null && userDTO.getRole() != null) {
-                    Role newRole = (Role) userRepository.findByRole(userDTO.getRole());
-
-                    if (newRole != null) {
-                        user.setRole(String.valueOf(newRole));  // Role එක update කරන්න
-                        userRepository.save(user);  // Database එකට save කරන්න
-                        return VarList.Created;  // Updated = 200 (Success)
-                    } else {
-                        return VarList.Not_Found;  // Role එක හම්බුනේ නැත්නම්
-                    }
-                }
-            }
-
-            return VarList.Not_Found;  // User එක හම්බුනේ නැත්නම්
-        } catch (Exception e) {
-            e.printStackTrace();
-            return VarList.Internal_Server_Error;  // Error එකක් ආවොත්
+        if (user != null && userDTO.getRole() != null) {
+            user.setRole(userDTO.getRole());
+            userRepository.save(user);
+            return VarList.Created;
+        } else {
+            return VarList.Not_Found;
         }
-
-
-
     }
 
+    public ResponseDTO existsByUsername(User user) {
+        /*if (userRepository.existsByUsername(user.getUsername())) {
+            return new ResponseDTO(VarList.Not_Acceptable, "Username is already taken", null);
+        }*/
+        userRepository.save(user);
+        return new ResponseDTO(VarList.Created, "User registered successfully", user);
+    }
+
+
+   /* public UserDTO findByUsername(String username) {
+        try {
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                return new ResponseDTO(VarList.No_Content, "No Users Found", null);
+            }
+            return new ResponseDTO(VarList.Created, "Users Retrieved Successfully", user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseDTO(VarList.Bad_Gateway, "An Unexpected Error Occurred", null);
+        }
+    }*/
 
     @Override
         public int saveUser(UserDTO userDTO) {
