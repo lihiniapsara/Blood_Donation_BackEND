@@ -27,17 +27,16 @@ public class Blood_RequestServiceImpl implements Blood_RequestService {
     @Autowired
     private HospitalRepository hospitalRepository;
 
-    public ResponseDTO getAll() {
-        try {
-            List<Blood_Request> bloodRequests = blood_requestRepository.findAll(); // Fetch all hospitals
-            if (bloodRequests.isEmpty()) {
-                return new ResponseDTO(VarList.No_Content, "No Blood Requests Found", null);
-            }
-            return new ResponseDTO(VarList.Created, "Blood Requests Retrieved Successfully", bloodRequests);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseDTO(VarList.Bad_Gateway, "An Unexpected Error Occurred", null);
+    public List<Blood_Request> getAllBloodRequests() {
+        List<Blood_Request> bloodRequests = blood_requestRepository.findAll();
+        System.out.println("Blood Requests: " + bloodRequests);
+        for (Blood_Request blood_request : bloodRequests) {
+            System.out.println(blood_request.getHospital().getHospitalName());
         }
+        return bloodRequests;
+/*
+        return blood_requestRepository.findAllBloodRequestsWithHospitalNative();
+*/
     }
 
     @Override
@@ -85,10 +84,10 @@ public class Blood_RequestServiceImpl implements Blood_RequestService {
         }
     }
 
-    @Override
+    /*@Override
     public List<Blood_RequestDTO> getAllBloodRequest() {
         return blood_requestRepository.findAllBloodRequestsWithHospitalName();
-    }
+    }*/
 
 
 

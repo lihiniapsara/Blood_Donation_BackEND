@@ -21,4 +21,5 @@ public class Blood_RequestDTO {
     private LocalDate requestDate;
     private String hospitalName;
 
+
 }

@@ -8,5 +8,7 @@ import java.util.List;
 public interface Blood_RequestService {
 
     int save(Blood_RequestDTO bloodRequestDTO);
+/*
     List<Blood_RequestDTO> getAllBloodRequest();
+*/
 }

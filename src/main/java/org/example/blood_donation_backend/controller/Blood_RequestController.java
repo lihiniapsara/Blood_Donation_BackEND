@@ -2,6 +2,7 @@ package org.example.blood_donation_backend.controller;
 
 import org.example.blood_donation_backend.dto.Blood_RequestDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
+import org.example.blood_donation_backend.entity.Blood_Request;
 import org.example.blood_donation_backend.service.impl.Blood_RequestServiceImpl;
 
 import org.example.blood_donation_backend.util.VarList;
@@ -19,12 +20,18 @@ public class Blood_RequestController {
     @Autowired
     private Blood_RequestServiceImpl blood_requestService;
 
-    @GetMapping
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Blood_Request>> getAllRequests() {
+
+        return ResponseEntity.ok(blood_requestService.getAllBloodRequests());
+    }
+   /* @GetMapping
     public ResponseEntity<List<Blood_RequestDTO>> getAllBloodRequests() {
         List<Blood_RequestDTO> bloodRequests = blood_requestService.getAllBloodRequest();
         return ResponseEntity.ok(bloodRequests);
     }
-
+*/
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> register(@RequestBody Blood_RequestDTO blood_requestDTO) {
         System.out.println("register blood request");

@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -17,7 +19,9 @@ import java.util.UUID;
 @Table(name = "blood_request")
 public class Blood_Request {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
     private String fullName;
@@ -31,7 +35,7 @@ public class Blood_Request {
     private LocalDate requestDate;
 
     @ManyToOne
-    @JoinColumn(name = "hospital_name", nullable = false)
+    @JoinColumn(name = "hospital_name", referencedColumnName = "hospitalid")
     private Hospital hospital;
 
     public Blood_Request(Hospital hospital, String fullName, String email, String phoneNumber, String bloodType, String district, String message) {
