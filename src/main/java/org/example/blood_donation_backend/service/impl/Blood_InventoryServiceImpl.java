@@ -1,5 +1,6 @@
 package org.example.blood_donation_backend.service.impl;
 
+import org.example.blood_donation_backend.dto.Blood_BankDTO;
 import org.example.blood_donation_backend.dto.Blood_InventoryDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.entity.Blood_Inventory;
@@ -8,9 +9,13 @@ import org.example.blood_donation_backend.service.Blood_InventoryService;
 import org.example.blood_donation_backend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.lang.model.util.AbstractAnnotationValueVisitor14;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,16 +31,29 @@ public class Blood_InventoryServiceImpl implements Blood_InventoryService {
     public ResponseDTO getAll() {
         try {
             List<Blood_Inventory> blood_inventories = blood_InventoryRepository.findAll();
-            if (blood_inventories.isEmpty()) {
-                return new ResponseDTO(VarList.No_Content, "No Blood Inventories Found", null);
+            List<Blood_Inventory> filteredInventories = new ArrayList<>();
+            LocalDate today = LocalDate.now();
+
+            for (Blood_Inventory inventory : blood_inventories) {
+                LocalDate expiryDate = inventory.getExpiryDate().toInstant()
+                        .atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+
+                if (expiryDate.isAfter(today)) {
+                    filteredInventories.add(inventory);
+                } else {
+                    blood_InventoryRepository.delete(inventory); // Auto-delete expired entries
+                }
+            }
+
+            if (filteredInventories.isEmpty()) {
+                return new ResponseDTO(VarList.No_Content, "No Available Blood Inventories Found", null);
             } else {
-                return new ResponseDTO(VarList.Created, "Blood Inventories Fetched Successfully", blood_inventories);
+                return new ResponseDTO(VarList.Created, "Blood Inventories Fetched Successfully", filteredInventories);
             }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseDTO(VarList.Bad_Gateway, "An Unexpected Error Occurred", null);
         }
-
     }
 
     @Override
@@ -71,6 +89,7 @@ public class Blood_InventoryServiceImpl implements Blood_InventoryService {
         }
     }
 
+
     @Override
     public ResponseDTO delete(UUID id) {
         try {
@@ -84,5 +103,20 @@ public class Blood_InventoryServiceImpl implements Blood_InventoryService {
             return new ResponseDTO(VarList.Bad_Gateway, "An Unexpected Error Occurred", null);
         }
     }
+    @Scheduled(cron = "0 0 0 * * ?") // Runs every day at midnight
+    public void deleteExpiredInventories() {
+        LocalDate today = LocalDate.now();
+        List<Blood_Inventory> allInventories = blood_InventoryRepository.findAll();
+
+        for (Blood_Inventory inventory : allInventories) {
+            LocalDate expiryDate = inventory.getExpiryDate().toInstant()
+                    .atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+
+            if (!expiryDate.isAfter(today)) {
+                blood_InventoryRepository.delete(inventory);
+            }
+        }
+    }
+
 
 }

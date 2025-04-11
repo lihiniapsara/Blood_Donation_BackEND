@@ -73,17 +73,13 @@ public class DonorController {
         Donor donor = (Donor) donorRepository.findByContact(donorDTO.getContact()).orElse(null);
 
         if (donor != null) {
-            // Update donor fields
             donor.setDonationDate(donorDTO.getDonationDate());
-
-            donorRepository.save(donor); // Save the updated donor to the repository
-
+            donorRepository.save(donor); // Save the updated donor
             return new ResponseDTO(VarList.Created, "Donor Updated Successfully", donor);
         } else {
             return new ResponseDTO(VarList.Not_Found, "Donor Not Found", null);
         }
     }
-
 
     @PostMapping(value = "/register")
     public ResponseEntity<ResponseDTO> registerDonor(@RequestBody @Valid DonorDTO donorDTO) {

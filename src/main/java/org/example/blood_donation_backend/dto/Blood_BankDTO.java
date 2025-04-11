@@ -14,6 +14,7 @@ public class Blood_BankDTO {
     private String location;
     private String district;
     private String latitude;
+    private String longitude;
     private String contactDetails;
     private List<String> stocklevels;
     private int storageCapacity;

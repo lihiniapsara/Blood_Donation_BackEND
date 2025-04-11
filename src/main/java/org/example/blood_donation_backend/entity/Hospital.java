@@ -1,9 +1,11 @@
 package org.example.blood_donation_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,12 +15,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@ToString(exclude = {"bloodRequests", "camps"}) // Exclude these to prevent recursion
 public class Hospital {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)")
     private UUID hospitalid;
-    @Column(unique = true,name = "hospital_name")
+    //@Column(unique = true,name = "hospital_name")
+    @Column(name = "hospital_name")
     private String hospitalName;
     private String typeOfHospital;
     private String registrationNumber;
@@ -47,8 +51,14 @@ public class Hospital {
 
     @ManyToOne
     private User user;
-    /*@OneToMany
-    private List<Camp> camps;*/
+
+    // Changed from @ManyToOne to @OneToMany
+    @OneToMany(mappedBy = "hospital")
+    @JsonIgnore
+    private List<Blood_Request> bloodRequests;
+    @OneToMany(mappedBy = "hospital")
+    @JsonIgnore
+    private List<Camp> camps;
 
     public Hospital(User byUsername, String hospitalName, String typeOfHospital, String registrationNumber, int yearOfEstablishment, String address, String city, String district, String province, String zipCode, String officialEmail, String contactNumber, String emergencyContactNumber, String website, boolean hasBloodBank, String bloodBankContactPersonName, String bloodBankContactNumber, List<String> availableBloodGroups, String bloodBankLicenseNumber, List<String> healthMinistryApprovalCertificate, boolean emergencyBloodServiceAvailable, boolean bloodDonationCampFacility, int numberOfBloodStorageUnits) {
         this.user = byUsername;

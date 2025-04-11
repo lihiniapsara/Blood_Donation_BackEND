@@ -41,7 +41,7 @@ public class HospitalController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<ResponseDTO> registerHospital(@RequestParam("hospitalName") String hospitalname, /* ... other params ... */
+    public ResponseEntity<ResponseDTO> registerHospital(@RequestParam("hospital_Name") String hospitalname, /* ... other params ... */
                                                         @RequestParam("typeOfHospital") String typeOfHospital,
                                                         @RequestParam("registrationNumber") String registrationNumber,
                                                         @RequestParam("yearOfEstablishment") Integer yearOfEstablishment,
@@ -121,6 +121,10 @@ public class HospitalController {
 
             // Save the hospital
             int res = hospitalService.saveHospital(hospitalDTO);
+            /*int res = 0;
+            for (int i = 0; i < 17; i++) {
+                res=hospitalService.saveHospital(hospitalDTO);
+            }*/
 
             // Return response based on result
             return switch (res) {

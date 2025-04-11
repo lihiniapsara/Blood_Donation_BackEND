@@ -21,6 +21,7 @@ public class Blood_Bank {
     private String location;
     private String district;
     private String latitude;
+    private String longitude;
     private String contactDetails;
     @ElementCollection
     private List<String> stocklevels;

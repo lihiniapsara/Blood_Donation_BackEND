@@ -15,7 +15,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("api/v1/blood-inventory")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class Blood_InventoryController {
+public class
+Blood_InventoryController {
     @Autowired
     private Blood_InventoryServiceImpl bloodInventoryService;
 

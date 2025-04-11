@@ -82,9 +82,9 @@ public class Blood_BankController {
 
 
 
-    @PutMapping("/update")
-    public String updateBloodBank(@RequestBody @Valid Blood_BankDTO blood_bankDTO) {
-        return new ResponseEntity<>(blood_bankService.updateBloodBank(blood_bankDTO), HttpStatus.CREATED).toString();
-
+    @PutMapping("/update-last-donated-date")
+    public ResponseDTO updateLastDonatedDate(@RequestBody @Valid Blood_BankDTO blood_bankDTO) {
+        return blood_bankService.updateLastDonatedDate(blood_bankDTO);
     }
+
 }

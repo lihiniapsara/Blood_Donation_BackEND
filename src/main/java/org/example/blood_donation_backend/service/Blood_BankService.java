@@ -2,7 +2,6 @@ package org.example.blood_donation_backend.service;
 
 import org.example.blood_donation_backend.dto.Blood_BankDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
-import org.springframework.http.ResponseEntity;
 
 public interface Blood_BankService {
     
@@ -11,5 +10,9 @@ public interface Blood_BankService {
 
     Object getAllBloodBanks();
 
-    ResponseEntity<ResponseDTO> updateBloodBank(Blood_BankDTO bloodBankDTO);
+    ResponseDTO updateBloodBank(Blood_BankDTO bloodBankDTO);
+
+    Blood_BankDTO getBloodBankByHospitalName(String hospitalName);
+
+    ResponseDTO updateLastDonatedDate(Blood_BankDTO bloodBankDTO); // Changed method name
 }

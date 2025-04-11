@@ -40,9 +40,9 @@ public class HospitalServiceImpl implements HospitalService {
         }*/
 
         System.out.println("jjjjjjj");
-        if (hospitalRepository.existsByOfficialEmail(hospitalDTO.getOfficialEmail())) {
+        /*if (hospitalRepository.existsByOfficialEmail(hospitalDTO.getOfficialEmail())) {
             return VarList.Not_Acceptable;
-        }else {
+        }else {*/
             //hospitalRepository.save(modelMapper.map(hospitalDTO, Hospital.class));
 
             try {
@@ -89,7 +89,7 @@ public class HospitalServiceImpl implements HospitalService {
             }
 
         }
-    }
+  //  }
 
 
     @Override

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,4 +14,5 @@ public class Blood_InventoryDTO {
     private Date donationDate;
     private Date expiryDate;
     private int units;
+    private String status;
 }
