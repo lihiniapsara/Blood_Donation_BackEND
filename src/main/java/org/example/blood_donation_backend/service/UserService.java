@@ -9,6 +9,9 @@ public interface UserService {
     UserDTO searchUser(String userName);
 
     public int updateUserRoleByEmail(UserDTO userDTO) ;
+
+    int resetPass(UserDTO exuser);
+
     ResponseDTO existsByUsername(User user);
 
 

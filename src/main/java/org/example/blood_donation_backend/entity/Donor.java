@@ -38,6 +38,7 @@ public class Donor implements Serializable {
     private boolean hasOtherIssues;
     private Date donationDate;
 
+
     public Donor(String fullName, String dateOfBirth, String gender, String bloodGroup,
                  String nicOrPassport, String contact, String email, String address,
                  String city, String district, String province, String zipCode) {

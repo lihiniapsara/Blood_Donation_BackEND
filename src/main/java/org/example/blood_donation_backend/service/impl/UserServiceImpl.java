@@ -70,6 +70,17 @@ import java.util.Set;
             return VarList.Not_Found;
         }
     }
+    @Override
+    public int resetPass(UserDTO exuser) {
+        if (!userRepository.existsByEmail(exuser.getEmail())) {
+            return VarList.Not_Acceptable;
+        } else {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            exuser.setPassword(passwordEncoder.encode(exuser.getPassword()));
+            userRepository.updatepassword(exuser.getEmail(),exuser.getPassword());
+            return VarList.Created;
+        }
+    }
 
     public ResponseDTO existsByUsername(User user) {
         /*if (userRepository.existsByUsername(user.getUsername())) {

@@ -1,7 +1,12 @@
 package org.example.blood_donation_backend.controller;
 
+import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.service.impl.UserServiceImpl;
+import org.example.blood_donation_backend.util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.example.blood_donation_backend.dto.UserDTO;
 
@@ -47,7 +52,7 @@ public class PasswordController {
 
                 String body = "Dear User,\n\n" +
                         "Your OTP code for accessing Blood Donation services is: " + code + "\n\n" +
-                        "Please use this code to verify your identity. The OTP is valid for 10 minutes only.\n" +
+                        "Please use this code to verify your identity. The OTP is valid for 30 seconds only.\n" +
                         "If you did not request this OTP, please ignore this email or contact support.\n\n" +
                         "Best regards,\n" +
                         "The Blood Donation  Team";
@@ -87,7 +92,7 @@ public class PasswordController {
         }).start();
         }
 
-        @PutMapping("/updatePassword")
+       /* @PutMapping("/updatePassword")
         public String updatePassword(@RequestBody UserDTO userDTO){
             try {
                 UserDTO exuser = userService.searchUser(userDTO.getEmail());
@@ -97,7 +102,63 @@ public class PasswordController {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        }*/
+   /* @PutMapping("/updatePassword")
+    public String updatePassword(@RequestBody UserDTO userDTO){
+        try {
+            UserDTO exuser = userService.searchUser(userDTO.getEmail());
+            exuser.setPassword(userDTO.getPassword());
+            System.out.println("updatePassword");
+            return "Password updated for "+exuser; // meka gahanna oneee
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+    }*/
+
+
+    @PutMapping("/updatePassword")
+    public String updatePassword(@RequestBody UserDTO userDTO) {
+        try {
+            UserDTO exuser = userService.searchUser(userDTO.getEmail());
+            if (exuser == null) {
+                return "User not found";
+            }
+            exuser.setPassword(userDTO.getPassword());
+            System.out.println("updatePassword");
+            return "Password updated for " + exuser;
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return "Error: Multiple accounts found with this email. Please contact support.";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<ResponseDTO> resetPassword(@RequestBody UserDTO userDTO){
+        try {
+            UserDTO exuser = userService.searchUser(userDTO.getEmail());
+            exuser.setPassword(userDTO.getPassword());
+            System.out.println("updatePassword");
+            int res = userService.resetPass(exuser);
+            switch (res) {
+                case VarList.Created -> {
+                    return ResponseEntity.status(HttpStatus.CREATED)
+                            .body(new ResponseDTO(VarList.Created, "Success", null));
+                }
+                case VarList.Not_Acceptable -> {
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                            .body(new ResponseDTO(VarList.Not_Acceptable, "Email Already Used", null));
+                }
+                default -> {
+                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                            .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+                }
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
+        }
+    }
     }
 
 
