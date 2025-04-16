@@ -17,6 +17,7 @@ public class Blood_Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID bloodbankid;
+    @Column(name = "hospital_name")
     private String hospitalName;
     private String location;
     private String district;

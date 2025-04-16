@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import org.example.blood_donation_backend.dto.HospitalDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.dto.UserDTO;
+import org.example.blood_donation_backend.entity.Blood_Bank;
 import org.example.blood_donation_backend.entity.User;
+import org.example.blood_donation_backend.repo.Blood_BankRepository;
 import org.example.blood_donation_backend.service.HospitalService;
 import org.example.blood_donation_backend.service.UserService;
 import org.example.blood_donation_backend.util.VarList;
@@ -21,25 +23,27 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/hospitals")
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 public class HospitalController {
-
     private final HospitalService hospitalService;
     private final UserService userService;
-
     public HospitalController(HospitalService hospitalService, UserService userService) {
         this.hospitalService = hospitalService;
         this.userService = userService;
     }
-
     @GetMapping("/getAll")
     public ResponseEntity<ResponseDTO> getAll() {
         return new ResponseEntity<>(hospitalService.getAllHospitals(), HttpStatus.OK);
     }
-
+    @GetMapping("/{district}")
+    public ResponseEntity<List<HospitalDTO>> getHospitalsByDistrict(@PathVariable String district) {
+        List<HospitalDTO> hospitals = hospitalService.getHospitalsByDistrict(district);
+        return ResponseEntity.ok(hospitals);
+    }
     @PostMapping(value = "/register")
     public ResponseEntity<ResponseDTO> registerHospital(@RequestParam("hospital_Name") String hospitalname, /* ... other params ... */
                                                         @RequestParam("typeOfHospital") String typeOfHospital,

@@ -12,6 +12,5 @@ public interface Blood_BankRepository extends JpaRepository<Blood_Bank, String> 
     boolean existsByHospitalName(String hospitalName);
 
     //Blood_Bank findByHospitalName(String hospitalName);
-
-
+    List<Blood_Bank> findByDistrict(String district);
     Optional<Blood_Bank> findByHospitalName(String hospitalName);}

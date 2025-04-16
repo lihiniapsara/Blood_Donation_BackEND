@@ -1,6 +1,7 @@
 package org.example.blood_donation_backend.service.impl;
 
 import org.example.blood_donation_backend.dto.DonorDTO;
+import org.example.blood_donation_backend.dto.HospitalDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.entity.Donor;
 import org.example.blood_donation_backend.entity.Hospital;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -73,6 +75,16 @@ public class DonorServiceImpl implements DonorService {
         } else {
             return new ResponseDTO(VarList.Not_Found, "Donor Not Found", null);
         }
+    }
+
+    @Override
+    public List<DonorDTO> getDonorsByDistrict(String district) {
+        List<Donor> donors = donorRepository.findByDistrict(district);
+        return donors.stream().map(donor -> {
+            DonorDTO dto = new DonorDTO();
+            dto.setEmail(donor.getEmail());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }
 /*

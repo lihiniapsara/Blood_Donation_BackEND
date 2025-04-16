@@ -53,8 +53,22 @@ public class Blood_BankController {
         }
     }
 
-
-    @PostMapping("/register")
+    @GetMapping("/stock-details")
+    public ResponseEntity<ResponseDTO> getBloodBankStockDetails() {
+        try {
+            List<Blood_BankDTO> stockDetails = blood_bankService.getBloodBankStockDetails();
+            if (!stockDetails.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.Accepted, "Blood Bank Stock Details Retrieved Successfully", stockDetails));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseDTO(VarList.Not_Found, "No Blood Banks Found", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.Internal_Server_Error, "Error Retrieving Stock Details", e.getMessage()));
+        }
+    }    @PostMapping("/register")
     public ResponseEntity<ResponseDTO> registerBloodBank(@RequestBody @Valid Blood_BankDTO blood_bankDTO) {
         System.out.println("registerBloodBank");
             try {

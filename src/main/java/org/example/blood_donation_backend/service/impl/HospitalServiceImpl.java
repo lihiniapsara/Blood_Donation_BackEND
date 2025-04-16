@@ -3,9 +3,11 @@ package org.example.blood_donation_backend.service.impl;
 import org.example.blood_donation_backend.dto.HospitalDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.dto.UserDTO;
+import org.example.blood_donation_backend.entity.Blood_Bank;
 import org.example.blood_donation_backend.entity.Donor;
 import org.example.blood_donation_backend.entity.Hospital;
 import org.example.blood_donation_backend.entity.User;
+import org.example.blood_donation_backend.repo.Blood_BankRepository;
 import org.example.blood_donation_backend.repo.HospitalRepository;
 import org.example.blood_donation_backend.repo.UserRepository;
 import org.example.blood_donation_backend.service.HospitalService;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,8 +30,16 @@ public class HospitalServiceImpl implements HospitalService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ModelMapper modelMapper;
-
+    private Blood_BankRepository blood_bankRepository;
+@Override
+    public List<HospitalDTO> getHospitalsByDistrict(String district) {
+        List<Hospital> hospitals = hospitalRepository.findByDistrict(district);
+        return hospitals.stream().map(hospital -> {
+            HospitalDTO dto = new HospitalDTO();
+            dto.setHospitalName(hospital.getHospitalName());
+            return dto;
+        }).collect(Collectors.toList());
+    }
     @Override
     public int saveHospital(HospitalDTO hospitalDTO) {
         /*try {
@@ -108,5 +119,6 @@ public class HospitalServiceImpl implements HospitalService {
             return new ResponseDTO(VarList.Bad_Gateway, "An Unexpected Error Occurred", null);
         }
     }
+
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+
 public class HospitalDTO {
     private String hospitalName;
     private String typeOfHospital;
@@ -32,4 +33,8 @@ public class HospitalDTO {
     private boolean bloodDonationCampFacility;
     private int numberOfBloodStorageUnits;
     private String userName;
+
+    public HospitalDTO(String hospitalName) {
+        this.hospitalName = hospitalName;
+    }
 }

@@ -20,4 +20,10 @@ public class Blood_BankDTO {
     private int storageCapacity;
     private String lastStockUpdateDate;
     private String managementType;
+
+
+    public Blood_BankDTO(String hospitalName,List<String> stocklevels) {
+        this.hospitalName = hospitalName;
+        this.stocklevels = stocklevels;
+    }
 }

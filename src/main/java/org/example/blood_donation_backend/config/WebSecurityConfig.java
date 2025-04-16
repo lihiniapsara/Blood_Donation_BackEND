@@ -61,6 +61,8 @@ public class WebSecurityConfig {
                                 "/api/v1/*/getAll",
                                 "/api/v1/*/update",
                                 "/api/v1/*/*",
+                                "/api/v1/alerts",
+                                "/api/v1/blood_bank/stock-details",
                                 "/api/v1/*/update-date",
 
                                 "/api/v1/user/update-role",

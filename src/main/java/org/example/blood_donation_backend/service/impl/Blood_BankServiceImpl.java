@@ -1,6 +1,8 @@
 package org.example.blood_donation_backend.service.impl;
 
+import org.example.blood_donation_backend.dto.BloodCountDTO;
 import org.example.blood_donation_backend.dto.Blood_BankDTO;
+import org.example.blood_donation_backend.dto.HospitalDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.entity.Blood_Bank;
 import org.example.blood_donation_backend.repo.Blood_BankRepository;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class Blood_BankServiceImpl implements Blood_BankService {
@@ -26,6 +31,31 @@ public class Blood_BankServiceImpl implements Blood_BankService {
     public Object getAllBloodBanks() {
         List<Blood_Bank> blood_banks = blood_bankRepository.findAll();
         return new ResponseEntity<>(new ResponseDTO(VarList.Created, "Blood Banks Fetched Successfully", blood_banks), HttpStatus.OK);
+    }
+    @Override
+    public List<Blood_BankDTO> getBloodBankStockDetails() {
+        List<Blood_Bank> bloodBanks = blood_bankRepository.findAll();
+        return bloodBanks.stream()
+                .map(bloodBank -> new Blood_BankDTO(bloodBank.getHospitalName(), bloodBank.getStocklevels()))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<BloodCountDTO> getBloodCounts(String hospitalName, List<String> bloodTypes) {
+        Blood_Bank bloodBank = blood_bankRepository.findByHospitalName(hospitalName.trim())
+                .orElseThrow(() -> new RuntimeException("Blood bank not found for hospital: " + hospitalName));
+
+        // No changes to BloodBank; use stockLevels as-is
+        Random random = new Random();
+        return bloodTypes.stream()
+                .filter(type -> bloodBank.getStocklevels().contains(type))
+                .map(type -> {
+                    BloodCountDTO dto = new BloodCountDTO();
+                    dto.setBloodType(type);
+                    // Mock counts since stockLevels only lists types
+                    dto.setCount(random.nextInt(200)); // Random 0-200 units
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

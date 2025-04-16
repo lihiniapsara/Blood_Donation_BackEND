@@ -2,10 +2,7 @@ package org.example.blood_donation_backend.controller;
 
 import jakarta.validation.Valid;
 import org.example.blood_donation_backend.QrGenerator.GenerateQr;
-import org.example.blood_donation_backend.dto.AuthDTO;
-import org.example.blood_donation_backend.dto.DonorDTO;
-import org.example.blood_donation_backend.dto.ResponseDTO;
-import org.example.blood_donation_backend.dto.UserDTO;
+import org.example.blood_donation_backend.dto.*;
 import org.example.blood_donation_backend.entity.Donor;
 import org.example.blood_donation_backend.repo.DonorRepository;
 import org.example.blood_donation_backend.service.DonorService;
@@ -17,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -66,6 +64,11 @@ public class DonorController {
         } else {
             return new ResponseDTO(VarList.Not_Found, "Donor Not Found", null);
         }
+    }
+    @GetMapping("/{district}")
+    public ResponseEntity<List<DonorDTO>> getDonorsByDistrict(@PathVariable String district) {
+        List<DonorDTO> donors = donorService.getDonorsByDistrict(district);
+        return ResponseEntity.ok(donors);
     }
 
     @PutMapping("update-date")
