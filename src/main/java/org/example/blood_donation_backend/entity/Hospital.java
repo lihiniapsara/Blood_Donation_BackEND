@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,6 +61,10 @@ public class Hospital {
     @JsonIgnore
     private List<Camp> camps;
 
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
+    @JsonIgnore
+
+    private List<Notification> notifications = new ArrayList<>();
     public Hospital(User byUsername, String hospitalName, String typeOfHospital, String registrationNumber, int yearOfEstablishment, String address, String city, String district, String province, String zipCode, String officialEmail, String contactNumber, String emergencyContactNumber, String website, boolean hasBloodBank, String bloodBankContactPersonName, String bloodBankContactNumber, List<String> availableBloodGroups, String bloodBankLicenseNumber, List<String> healthMinistryApprovalCertificate, boolean emergencyBloodServiceAvailable, boolean bloodDonationCampFacility, int numberOfBloodStorageUnits) {
         this.user = byUsername;
         this.hospitalName = hospitalName;
