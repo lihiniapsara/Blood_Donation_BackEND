@@ -27,4 +27,8 @@ public class Alert {
     @Column(length = 1000)
     private String body;
     private String status;
+    @ElementCollection
+    @CollectionTable(name = "alert_recipient_emails", joinColumns = @JoinColumn(name = "alert_id"))
+    @Column(name = "email")
+    private List<String> recipientEmails;
 }

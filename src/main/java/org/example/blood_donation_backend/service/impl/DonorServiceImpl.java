@@ -1,10 +1,8 @@
 package org.example.blood_donation_backend.service.impl;
 
 import org.example.blood_donation_backend.dto.DonorDTO;
-import org.example.blood_donation_backend.dto.HospitalDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.entity.Donor;
-import org.example.blood_donation_backend.entity.Hospital;
 import org.example.blood_donation_backend.repo.DonorRepository;
 import org.example.blood_donation_backend.service.DonorService;
 import org.example.blood_donation_backend.util.VarList;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -76,8 +73,12 @@ public class DonorServiceImpl implements DonorService {
             return new ResponseDTO(VarList.Not_Found, "Donor Not Found", null);
         }
     }
-
     @Override
+    public List<Donor> findByDistrictAndBloodGroupIn(String district, List<String> bloodTypes) {
+        return donorRepository.findByDistrictAndBloodGroupIn(district, bloodTypes);
+    }
+
+   /* @Override
     public List<DonorDTO> getDonorsByDistrict(String district) {
         List<Donor> donors = donorRepository.findByDistrict(district);
         return donors.stream().map(donor -> {
@@ -85,7 +86,7 @@ public class DonorServiceImpl implements DonorService {
             dto.setEmail(donor.getEmail());
             return dto;
         }).collect(Collectors.toList());
-    }
+    }*/
 }
 /*
 if (user != null && userDTO.getRole() != null) {

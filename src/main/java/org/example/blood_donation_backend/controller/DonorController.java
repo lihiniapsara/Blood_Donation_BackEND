@@ -66,9 +66,10 @@ public class DonorController {
         }
     }
     @GetMapping("/{district}")
-    public ResponseEntity<List<DonorDTO>> getDonorsByDistrict(@PathVariable String district) {
-        List<DonorDTO> donors = donorService.getDonorsByDistrict(district);
-        return ResponseEntity.ok(donors);
+    public ResponseEntity<List<Donor>> getDonorsByDistrictAndBloodTypes(
+            @PathVariable String district,
+            @RequestParam List<String> bloodTypes) {
+        return ResponseEntity.ok(donorService.findByDistrictAndBloodGroupIn(district, bloodTypes));
     }
 
     @PutMapping("update-date")
