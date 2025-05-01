@@ -64,6 +64,8 @@ public class WebSecurityConfig {
                                 "/api/v1/alerts",
                                 "/api/v1/blood_bank/stock-details",
                                 "/api/v1/*/update-date",
+                                "/api/v1/donations",
+                                "/api/v1/user/getemail/{email}",
 
                                 "/api/v1/user/update-role",
 

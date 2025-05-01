@@ -15,4 +15,5 @@ public interface UserService {
     ResponseDTO existsByUsername(User user);
 
 
+    UserDTO getUserByEmail(String email);
 }

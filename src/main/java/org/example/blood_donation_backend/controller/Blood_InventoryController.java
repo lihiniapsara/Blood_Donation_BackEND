@@ -55,9 +55,9 @@ Blood_InventoryController {
         return new ResponseEntity<>(bloodInventoryService.update(id, blood_inventoryDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+  /*  @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseDTO> delete(@PathVariable UUID id) {
         return new ResponseEntity<>(bloodInventoryService.delete(id), HttpStatus.OK);
-    }
+    }*/
 
 }

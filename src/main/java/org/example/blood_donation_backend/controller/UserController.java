@@ -94,6 +94,21 @@ public class UserController {
                     .body(new ResponseDTO(VarList.Internal_Server_Error, "Error updating role: " + e.getMessage(), null));
         }
     }
+    @GetMapping("/getemail/{email}")
+    public ResponseEntity<ResponseDTO> getUserByEmail(@PathVariable("email") String email) {
+        try {
+            UserDTO userDTO = userService.getUserByEmail(email);
+            if (userDTO == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseDTO(VarList.Not_Found, "User not found", null));
+            } else {
+                return ResponseEntity.ok(new ResponseDTO(VarList.Found, "User found", userDTO));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.Internal_Server_Error, "Error getting user: " + e.getMessage(), null));
+        }
+    }
 
 
 }

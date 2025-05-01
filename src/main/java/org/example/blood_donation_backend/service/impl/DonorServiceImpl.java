@@ -3,7 +3,9 @@ package org.example.blood_donation_backend.service.impl;
 import org.example.blood_donation_backend.dto.DonorDTO;
 import org.example.blood_donation_backend.dto.ResponseDTO;
 import org.example.blood_donation_backend.entity.Donor;
+import org.example.blood_donation_backend.entity.User;
 import org.example.blood_donation_backend.repo.DonorRepository;
+import org.example.blood_donation_backend.repo.UserRepository;
 import org.example.blood_donation_backend.service.DonorService;
 import org.example.blood_donation_backend.util.VarList;
 import org.modelmapper.ModelMapper;
@@ -18,6 +20,8 @@ import java.util.List;
 public class DonorServiceImpl implements DonorService {
     @Autowired
     private DonorRepository donorRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
     @Override

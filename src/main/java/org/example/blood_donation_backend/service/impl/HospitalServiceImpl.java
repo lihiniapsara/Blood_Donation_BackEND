@@ -57,6 +57,7 @@ public class HospitalServiceImpl implements HospitalService {
             //hospitalRepository.save(modelMapper.map(hospitalDTO, Hospital.class));
 
             try {
+                System.out.println("into tryyyyyy");
                Hospital hospital = new Hospital(
                        userRepository.findByUsername(hospitalDTO.getUserName()),
                         hospitalDTO.getHospitalName(),
@@ -92,6 +93,9 @@ public class HospitalServiceImpl implements HospitalService {
                        userRepository.findByUsername(hospitalDTO.getUserName());
 */
                hospitalRepository.save(hospital);
+               User user = userRepository.findByUsername(hospitalDTO.getUserName());
+               user.setRole("Admin");
+               userRepository.save(user);
                return VarList.Created;
 
             }catch (Exception e) {

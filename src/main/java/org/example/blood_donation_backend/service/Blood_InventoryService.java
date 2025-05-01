@@ -12,5 +12,7 @@ public interface Blood_InventoryService {
 
      ResponseDTO update(UUID id, Blood_InventoryDTO bloodInventoryDTO) ;
 
+/*
     ResponseDTO delete(UUID id);
+*/
 }

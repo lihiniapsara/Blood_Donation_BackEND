@@ -90,6 +90,12 @@ import java.util.Set;
         return new ResponseDTO(VarList.Created, "User registered successfully", user);
     }
 
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        return modelMapper.map(user,UserDTO.class);
+    }
+
 
    /* public UserDTO findByUsername(String username) {
         try {

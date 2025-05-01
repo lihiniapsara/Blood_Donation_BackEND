@@ -90,7 +90,7 @@ public class Blood_InventoryServiceImpl implements Blood_InventoryService {
     }
 
 
-    @Override
+  /*  @Override
     public ResponseDTO delete(UUID id) {
         try {
             if (blood_InventoryRepository.existsById(String.valueOf(id))) {
@@ -102,7 +102,7 @@ public class Blood_InventoryServiceImpl implements Blood_InventoryService {
             e.printStackTrace();
             return new ResponseDTO(VarList.Bad_Gateway, "An Unexpected Error Occurred", null);
         }
-    }
+    }*/
     @Scheduled(cron = "0 0 0 * * ?") // Runs every day at midnight
     public void deleteExpiredInventories() {
         LocalDate today = LocalDate.now();

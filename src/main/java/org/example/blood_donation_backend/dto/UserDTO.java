@@ -13,6 +13,9 @@ public class UserDTO {
     private String email;
     private String password;
     private String role;
+    private String fullName; // Added
+    private String mobileNumber; // Added
+    private String nicNumber; // Added
 
     public UserDTO( String email, String password) {
         this.email = email;
